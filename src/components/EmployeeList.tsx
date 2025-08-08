@@ -3,9 +3,11 @@ import { Employee } from '../interfaces/types';
 
 interface Props {
   employees: Employee[];
+  onEdit: (employee: Employee) => void;
+  onCreate: () => void;
 }
 
-const EmployeeList: React.FC<Props> = ({ employees }) => {
+const EmployeeList: React.FC<Props> = ({ employees, onEdit, onCreate }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const employeesPerPage = 10;
@@ -57,8 +59,7 @@ const EmployeeList: React.FC<Props> = ({ employees }) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        {/* 🔍 Search Input */}
+      <div className="flex justify-between items-center flex-wrap gap-2">
         <input
           type="text"
           placeholder="Search by name or role"
@@ -70,12 +71,21 @@ const EmployeeList: React.FC<Props> = ({ employees }) => {
           className="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        <button
-          onClick={exportToCSV}
-          className="ml-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 whitespace-nowrap"
-        >
-          Export CSV
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={onCreate}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+           Create Employee
+          </button>
+
+          <button
+            onClick={exportToCSV}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            Export CSV
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
@@ -86,8 +96,9 @@ const EmployeeList: React.FC<Props> = ({ employees }) => {
               <th className="px-4 py-2 border">Email</th>
               <th className="px-4 py-2 border">Role</th>
               <th className="px-4 py-2 border">Department</th>
-              <th className="px-4 py-2 border">Experience (Years)</th>
+              <th className="px-4 py-2 border text-center">Experience</th>
               <th className="px-4 py-2 border">Salary</th>
+              <th className="px-4 py-2 border">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -100,6 +111,14 @@ const EmployeeList: React.FC<Props> = ({ employees }) => {
                   <td className="px-4 py-2 border">{emp.department.name}</td>
                   <td className="px-4 py-2 border text-center">{emp.experienceYears}</td>
                   <td className="px-4 py-2 border">₹{emp.salary.toLocaleString()}</td>
+                  <td className="px-4 py-2 border">
+                    <button
+                      onClick={() => onEdit(emp)}
+                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    >
+                       Edit
+                    </button>
+                  </td>
                 </tr>
               ))
             ) : (
@@ -130,8 +149,8 @@ const EmployeeList: React.FC<Props> = ({ employees }) => {
                 key={page}
                 onClick={() => goToPage(page)}
                 className={`px-3 py-1 rounded ${currentPage === page
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 hover:bg-gray-200'
                   }`}
               >
                 {page}

@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import EmployeeList from '../components/EmployeeList';
 import FilterBar from '../components/FilterBar';
 import { Employees } from '../data/Employees';
+import { Employee } from '../interfaces/types';
 
 const Dashboard: React.FC = () => {
   const [selectedDept, setSelectedDept] = useState('');
@@ -38,6 +39,14 @@ const Dashboard: React.FC = () => {
     return data;
   }, [selectedDept, experienceRange, sortKey]);
 
+  const handleEdit = (employee: Employee) => {
+    console.log('Editing:', employee);
+  };
+
+  const handleCreate = () => {
+    console.log('Creating new employee');
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Employee Dashboard</h1>
@@ -52,7 +61,11 @@ const Dashboard: React.FC = () => {
         onSortChange={setSortKey}
       />
 
-      <EmployeeList employees={filteredEmployees} />
+      <EmployeeList
+        employees={filteredEmployees}
+        onEdit={handleEdit}
+        onCreate={handleCreate}
+      />
     </div>
   );
 };
