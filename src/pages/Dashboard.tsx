@@ -1,18 +1,23 @@
 import React, { useState, useMemo } from 'react';
 import EmployeeList from '../components/EmployeeList';
 import FilterBar from '../components/FilterBar';
-import { Employees } from '../data/Employees';
+import { Employees as mockEmployees } from '../data/Employees';
 import { Employee } from '../interfaces/types';
+import EmployeeForm from '../components/EmployeeForm';
+import { v4 as uuidv4 } from 'uuid'; 
 
 const Dashboard: React.FC = () => {
+  const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [selectedDept, setSelectedDept] = useState('');
   const [experienceRange, setExperienceRange] = useState('');
   const [sortKey, setSortKey] = useState('name');
+  const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
-  const departments = Array.from(new Set(Employees.map(emp => emp.department.name)));
+  const departments = Array.from(new Set(employees.map(emp => emp.department.name)));
 
   const filteredEmployees = useMemo(() => {
-    let data = [...Employees];
+    let data = [...employees];
 
     if (selectedDept) {
       data = data.filter(emp => emp.department.name === selectedDept);
@@ -37,14 +42,37 @@ const Dashboard: React.FC = () => {
     }
 
     return data;
-  }, [selectedDept, experienceRange, sortKey]);
-
-  const handleEdit = (employee: Employee) => {
-    console.log('Editing:', employee);
-  };
+  }, [selectedDept, experienceRange, sortKey, employees]);
 
   const handleCreate = () => {
-    console.log('Creating new employee');
+    setEditingEmployee(null);
+    setShowForm(true);
+  };
+
+  const handleEdit = (employee: Employee) => {
+    setEditingEmployee(employee);
+    setShowForm(true);
+  };
+
+  const handleFormSubmit = (formData: Omit<Employee, 'id'>) => {
+    if (editingEmployee) {
+      // Edit
+      setEmployees(prev =>
+        prev.map(emp => (emp.id === editingEmployee.id ? { ...editingEmployee, ...formData } : emp))
+      );
+    } else {
+      // Create
+      setEmployees(prev => [
+        ...prev,
+        {
+          id: uuidv4(),
+          ...formData,
+        },
+      ]);
+    }
+
+    setShowForm(false);
+    setEditingEmployee(null);
   };
 
   return (
@@ -66,6 +94,14 @@ const Dashboard: React.FC = () => {
         onEdit={handleEdit}
         onCreate={handleCreate}
       />
+
+      {showForm && (
+        <EmployeeForm
+          initialData={editingEmployee ?? undefined}
+          onSubmit={handleFormSubmit}
+          onClose={() => setShowForm(false)}
+        />
+      )}
     </div>
   );
 };

@@ -13,7 +13,7 @@ export interface Department {
 export interface Role {
   id: string;
   title: string;
-  level: 'Junior' | 'Mid' | 'Senior' | 'Lead' | 'Manager';
+  level: '' |'Junior' | 'Mid' | 'Senior' | 'Lead' | 'Manager';
 }
 
 export interface Employee {
