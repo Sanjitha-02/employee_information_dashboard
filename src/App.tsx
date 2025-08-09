@@ -9,7 +9,6 @@ const Home: React.FC = () => {
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg text-center">
         <h1 className="text-2xl font-bold mb-6">Welcome to Employee Dashboard</h1>
 
-        {/* Button group - responsive */}
         <div className="flex flex-col sm:flex-row gap-4 w-full">
           <Link to="/dashboard" className="flex-1">
             <button className="bg-blue-600 text-white px-4 py-3 rounded-lg w-full hover:bg-blue-700">

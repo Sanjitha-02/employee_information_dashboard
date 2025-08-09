@@ -13,7 +13,6 @@ const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#8dd1e1'];
 const EmployeeCharts: React.FC = () => {
   const navigate = useNavigate();
 
-  // ✅ Department distribution
   const departmentDistribution = Employees.reduce((acc, emp) => {
     const dept = emp.department.name;
     acc[dept] = (acc[dept] || 0) + 1;
@@ -22,7 +21,6 @@ const EmployeeCharts: React.FC = () => {
 
   const pieData = Object.entries(departmentDistribution).map(([name, value]) => ({ name, value }));
 
-  // ✅ Salary buckets
   const salaryBuckets = [
     { name: '<3L', range: [0, 300000], count: 0 },
     { name: '3-6L', range: [300001, 600000], count: 0 },
@@ -38,7 +36,6 @@ const EmployeeCharts: React.FC = () => {
     });
   });
 
-  // ✅ Avg salary per department
   const salaryByDept = Employees.reduce((acc, emp) => {
     const dept = emp.department.name;
     if (!acc[dept]) acc[dept] = { total: 0, count: 0 };
@@ -54,7 +51,6 @@ const EmployeeCharts: React.FC = () => {
 
   return (
     <div className="p-6 space-y-8">
-      {/* ✅ Minimal Back Button with only symbol */}
       <div className="flex items-center mb-4">
         <button
           onClick={() => navigate('/')}
@@ -66,7 +62,6 @@ const EmployeeCharts: React.FC = () => {
         <h1 className="text-2xl font-bold">Employee Charts</h1>
       </div>
 
-      {/* Pie Chart */}
       <div className="w-full h-96">
         <h2 className="text-lg font-semibold mb-2">Employee Distribution by Department</h2>
         <ResponsiveContainer>
@@ -81,7 +76,6 @@ const EmployeeCharts: React.FC = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Salary Distribution */}
       <div className="w-full h-96">
         <h2 className="text-lg font-semibold mb-2">Salary Distribution</h2>
         <ResponsiveContainer>
@@ -94,7 +88,6 @@ const EmployeeCharts: React.FC = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Average Salary */}
       <div className="w-full h-96">
         <h2 className="text-lg font-semibold mb-2">Department-wise Average Salary</h2>
         <ResponsiveContainer>
