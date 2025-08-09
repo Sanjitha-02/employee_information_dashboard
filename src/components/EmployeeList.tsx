@@ -32,7 +32,8 @@ const EmployeeList: React.FC<Props> = ({ employees, onEdit, onCreate }) => {
 
   const exportToCSV = () => {
     const headers = ['Name', 'Email', 'Role', 'Department', 'Experience', 'Salary'];
-    const rows = currentEmployees.map(emp => [
+
+    const rows = filteredEmployees.map(emp => [
       `${emp.firstName} ${emp.lastName}`,
       emp.email,
       `${emp.role.title} (${emp.role.level})`,
@@ -43,7 +44,7 @@ const EmployeeList: React.FC<Props> = ({ employees, onEdit, onCreate }) => {
 
     const csvContent = [
       headers.join(','),
-      ...rows.map(row => row.join(','))
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -76,7 +77,7 @@ const EmployeeList: React.FC<Props> = ({ employees, onEdit, onCreate }) => {
             onClick={onCreate}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
-           Create Employee
+            Create Employee
           </button>
 
           <button
@@ -116,14 +117,14 @@ const EmployeeList: React.FC<Props> = ({ employees, onEdit, onCreate }) => {
                       onClick={() => onEdit(emp)}
                       className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                     >
-                       Edit
+                      Edit
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="px-4 py-4 text-center text-gray-500">
+                <td colSpan={7} className="px-4 py-4 text-center text-gray-500">
                   No employees found.
                 </td>
               </tr>
