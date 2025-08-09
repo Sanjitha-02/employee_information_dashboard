@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   PieChart, Pie, Cell,
   BarChart, Bar, XAxis, YAxis, Tooltip, Legend,
@@ -10,6 +11,8 @@ import { Employees } from '../data/Employees';
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#8dd1e1'];
 
 const EmployeeCharts: React.FC = () => {
+  const navigate = useNavigate();
+
   const departmentDistribution = Employees.reduce((acc, emp) => {
     const dept = emp.department.name;
     acc[dept] = (acc[dept] || 0) + 1;
@@ -48,7 +51,16 @@ const EmployeeCharts: React.FC = () => {
 
   return (
     <div className="p-6 space-y-8">
-      <h1 className="text-2xl font-bold">Employee Charts</h1>
+      <div className="flex items-center mb-4">
+        <button
+          onClick={() => navigate('/')}
+          className="text-2xl mr-4 hover:opacity-70"
+          aria-label="Go back"
+        >
+          ⬅
+        </button>
+        <h1 className="text-2xl font-bold">Employee Charts</h1>
+      </div>
 
       <div className="w-full h-96">
         <h2 className="text-lg font-semibold mb-2">Employee Distribution by Department</h2>

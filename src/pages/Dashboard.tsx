@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import EmployeeList from '../components/EmployeeList';
 import FilterBar from '../components/FilterBar';
 import { Employees as mockEmployees } from '../data/Employees';
@@ -7,6 +8,8 @@ import EmployeeForm from '../components/EmployeeForm';
 import { v4 as uuidv4 } from 'uuid';
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+
   const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [selectedDept, setSelectedDept] = useState('');
   const [experienceRange, setExperienceRange] = useState('');
@@ -74,16 +77,26 @@ const Dashboard: React.FC = () => {
 
   const totalEmployees = employees.length;
   const activeEmployees = employees.filter(emp => emp.isActive).length;
-  const averageSalary = totalEmployees > 0
-    ? Math.round(employees.reduce((sum, emp) => sum + emp.salary, 0) / totalEmployees)
-    : 0;
+  const averageSalary =
+    totalEmployees > 0
+      ? Math.round(employees.reduce((sum, emp) => sum + emp.salary, 0) / totalEmployees)
+      : 0;
   const totalDepartments = new Set(employees.map(emp => emp.department.name)).size;
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Employee Dashboard</h1>
+      <div className="flex items-center mb-4">
+        <button
+          onClick={() => navigate('/')}
+          className="text-2xl mr-4 hover:opacity-70"
+          aria-label="Go back"
+        >
+          ⬅
+        </button>
+        <h1 className="text-2xl font-bold">Employee Dashboard</h1>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
         <div className="bg-blue-600 text-white p-5 rounded-lg shadow-md">
           <h3 className="text-sm font-medium">Total Employees</h3>
           <p className="text-2xl font-bold">{totalEmployees}</p>
